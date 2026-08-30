@@ -1,0 +1,32 @@
+#!/usr/bin/env -S dotnet run --file
+#:property TargetFramework=net10.0-windows7.0
+#:project ../src/NebriaChip.Ip.Win.csproj
+#:package ConsoleAppFramework@5.7.13
+#:package Lestaly@0.142.0
+using System.Net;
+using ConsoleAppFramework;
+using Lestaly;
+using NebriaChip.Ip.Win;
+
+await ConsoleApp.RunAsync(args, async (
+    string adapter,
+    string address,
+    int prefix,
+    string? errorFile = default,
+    CancellationToken signal = default
+) => await Paved.RunAsync(async () =>
+{
+    var addr = IPAddress.Parse(address);
+    var addrOperator = new WinIpAddrOperator();
+
+    Console.WriteLine($"Create Address: [{adapter}] {addr}/{prefix}");
+    var result = addrOperator.CreateUnicastAddress(adapter, addr, prefix);
+    Console.WriteLine($".. Result={result}");
+
+    if (result == WinIpError.Success)
+    {
+        Console.WriteLine("DAD Check:");
+        var state = await addrOperator.WaitDadStateAsync(adapter, addr, signal);
+        Console.WriteLine($".. {(state ? "Preferred" : "Failed")}");
+    }
+}));

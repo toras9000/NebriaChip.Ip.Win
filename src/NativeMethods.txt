@@ -1,0 +1,9 @@
+﻿ConvertInterfaceGuidToLuid
+ConvertInterfaceAliasToLuid
+InitializeUnicastIpAddressEntry
+GetUnicastIpAddressEntry
+CreateUnicastIpAddressEntry
+DeleteUnicastIpAddressEntry
+NotifyUnicastIpAddressChange
+CancelMibChangeNotify2
+FormatMessage

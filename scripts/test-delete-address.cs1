@@ -1,0 +1,32 @@
+#!/usr/bin/env -S dotnet run --file
+#:property TargetFramework=net10.0-windows7.0
+#:project ../src/NebriaChip.Ip.Win.csproj
+#:package Lestaly@0.142.0
+using System.Net;
+using System.Net.NetworkInformation;
+using Lestaly;
+using NebriaChip.Ip.Win;
+
+return await Paved.ProceedAsync(async () =>
+{
+    if (!WinUAC.IsElevated())
+    {
+        await CmdShell.ExecAsync("dotnet", ["run", "--file", ThisSource.File()], verb: "runas");
+        return;
+    }
+
+    var nwif = NetworkInterface.GetAllNetworkInterfaces()
+        .Where(nw => nw.Supports(NetworkInterfaceComponent.IPv4) || nw.Supports(NetworkInterfaceComponent.IPv6))
+        .Where(nw => nw.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+        .Where(nw => nw.NetworkInterfaceType != NetworkInterfaceType.Tunnel)
+        .First();
+    var address = new IPAddress([192, 168, 100, 10]);
+    var prefix = 24;
+
+    Console.WriteLine($"Delete Address");
+    Console.WriteLine($".. Interface: {nwif.Name}");
+    Console.WriteLine($".. Address: {address}/{prefix}");
+    var addrOperator = new WinIpAddrOperator();
+    var result = addrOperator.DeleteUnicastAddress(nwif, address, prefix);
+    Console.WriteLine($".. Result: {result}");
+});

@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="src/NebriaChip.Ip.Win.csproj" />
+  <Project Path="test/NebriaChip.Ip.Win.Tests.csproj" />
 </Solution>
