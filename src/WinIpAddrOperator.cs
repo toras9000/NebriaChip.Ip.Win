@@ -37,7 +37,20 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
     /// <param name="optimistic">楽観的な DAD を利用するか否か。これを true にすると、アドレスのDAD初期状態が Tentative ではなく Preferredになります。</param>
     /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
     public WinIpError CreateUnicastAddress(NetworkInterface nwif, IPAddress addr, int prefix, bool optimistic = false)
-        => createUnicastAddress(adapter(nwif), addr, prefix, optimistic);
+        => createUnicastAddress(adapter(nwif), new(addr, checked((byte)prefix)), optimistic);
+
+    /// <summary>ユニキャストIPアドレスを追加する</summary>
+    /// <remarks>
+    /// このメソッドで追加されるIPアドレスは一時的なものです。
+    /// コンピュータの再起動やネットワーク インターフェイスのリセットなどで破棄されます。
+    /// IPアドレスの追加には管理者権限が必要です。
+    /// </remarks>
+    /// <param name="nwif">対象ネットワークインタフェース</param>
+    /// <param name="address">追加するIPアドレス/プレフィックス</param>
+    /// <param name="optimistic">楽観的な DAD を利用するか否か。これを true にすると、アドレスのDAD初期状態が Tentative ではなく Preferredになります。</param>
+    /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
+    public WinIpError CreateUnicastAddress(NetworkInterface nwif, IPNetAddress address, bool optimistic = false)
+        => createUnicastAddress(adapter(nwif), address, optimistic);
 
     /// <summary>ユニキャストIPアドレスを追加する</summary>
     /// <remarks><see cref="CreateUnicastAddress(NetworkInterface, IPAddress, int, bool)"/></remarks>
@@ -47,7 +60,16 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
     /// <param name="optimistic">楽観的な DAD を利用するか否か。これを true にすると、アドレスのDAD初期状態が Tentative ではなく Preferredになります。</param>
     /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
     public WinIpError CreateUnicastAddress(string alias, IPAddress addr, int prefix, bool optimistic = false)
-        => createUnicastAddress(adapter(alias), addr, prefix, optimistic);
+        => createUnicastAddress(adapter(alias), new(addr, checked((byte)prefix)), optimistic);
+
+    /// <summary>ユニキャストIPアドレスを追加する</summary>
+    /// <remarks><see cref="CreateUnicastAddress(NetworkInterface, IPAddress, int, bool)"/></remarks>
+    /// <param name="alias">ネットワークインタフェース名</param>
+    /// <param name="address">追加するIPアドレス/プレフィックス</param>
+    /// <param name="optimistic">楽観的な DAD を利用するか否か。これを true にすると、アドレスのDAD初期状態が Tentative ではなく Preferredになります。</param>
+    /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
+    public WinIpError CreateUnicastAddress(string alias, IPNetAddress address, bool optimistic = false)
+        => createUnicastAddress(adapter(alias), address, optimistic);
     #endregion
 
     #region 削除
@@ -60,7 +82,17 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
     /// <param name="prefix">ネットワークプレフィックス</param>
     /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
     public WinIpError DeleteUnicastAddress(NetworkInterface nwif, IPAddress addr, int prefix)
-        => deleteUnicastAddress(adapter(nwif), addr, prefix);
+        => deleteUnicastAddress(adapter(nwif), new(addr, checked((byte)prefix)));
+
+    /// <summary>ユニキャストIPアドレスを削除する</summary>
+    /// <remarks>
+    /// IPアドレスの削除には管理者権限が必要です。
+    /// </remarks>
+    /// <param name="nwif">対象ネットワークインタフェース</param>
+    /// <param name="address">追加するIPアドレス/プレフィックス</param>
+    /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
+    public WinIpError DeleteUnicastAddress(NetworkInterface nwif, IPNetAddress address)
+        => deleteUnicastAddress(adapter(nwif), address);
 
     /// <summary>ユニキャストIPアドレスを削除する</summary>
     /// <remarks><see cref="DeleteUnicastAddress(NetworkInterface, IPAddress, int)"/></remarks>
@@ -69,7 +101,15 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
     /// <param name="prefix">ネットワークプレフィックス</param>
     /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
     public WinIpError DeleteUnicastAddress(string alias, IPAddress addr, int prefix)
-        => deleteUnicastAddress(adapter(alias), addr, prefix);
+        => deleteUnicastAddress(adapter(alias), new(addr, checked((byte)prefix)));
+
+    /// <summary>ユニキャストIPアドレスを削除する</summary>
+    /// <remarks><see cref="DeleteUnicastAddress(NetworkInterface, IPAddress, int)"/></remarks>
+    /// <param name="alias">ネットワークインタフェース名</param>
+    /// <param name="address">追加するIPアドレス/プレフィックス</param>
+    /// <returns>結果ステータス。オプションの <see cref="WinIpAddrOperatorOptions.ThrowOnError"/> が true の場合はエラー時に例外送出するため、戻り値を確認する必要はありません。</returns>
+    public WinIpError DeleteUnicastAddress(string alias, IPNetAddress address)
+        => deleteUnicastAddress(adapter(alias), address);
     #endregion
 
     #region 情報取得
@@ -250,15 +290,11 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
     #region IP操作
     /// <summary>ユニキャストIPアドレスを追加する</summary>
     /// <param name="adapter">ネットワークインタフェース中間表現</param>
-    /// <param name="addr">追加するIPアドレス</param>
-    /// <param name="prefix">ネットワークプレフィックス</param>
+    /// <param name="netAddr">追加するIPアドレス/プレフィックス</param>
     /// <param name="optimistic">楽観的な DAD を利用するか否か</param>
     /// <returns>結果ステータス</returns>
-    private WinIpError createUnicastAddress(NwAdapter adapter, IPAddress addr, int prefix, bool optimistic)
+    private WinIpError createUnicastAddress(NwAdapter adapter, IPNetAddress netAddr, bool optimistic)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(prefix, 0);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(prefix, 255);
-
         // ネットワークインタフェースのLUID取得
         var luidResult = adapter.ToLuid(out var luid);
         if (luidResult != WinIpError.Success) return luidResult;
@@ -266,8 +302,7 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
         // IP追加用のROW構造体設定
         PInvoke.InitializeUnicastIpAddressEntry(out var addrRow);
         addrRow.InterfaceLuid = luid;
-        addrRow.OnLinkPrefixLength = (byte)prefix;
-        addrRow.SetAddress(addr);
+        addrRow.SetAddress(netAddr);
         if (optimistic) addrRow.DadState = NL_DAD_STATE.IpDadStatePreferred;
 
         // IP追加
@@ -277,14 +312,10 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
 
     /// <summary>ユニキャストIPアドレスを削除する</summary>
     /// <param name="adapter">ネットワークインタフェース中間表現</param>
-    /// <param name="addr">削除するIPアドレス</param>
-    /// <param name="prefix">ネットワークプレフィックス</param>
+    /// <param name="netAddr">追加するIPアドレス/プレフィックス</param>
     /// <returns>結果ステータス</returns>
-    private WinIpError deleteUnicastAddress(NwAdapter adapter, IPAddress addr, int prefix)
+    private WinIpError deleteUnicastAddress(NwAdapter adapter, IPNetAddress netAddr)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(prefix, 0);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(prefix, 255);
-
         // ネットワークインタフェースのLUID取得
         var luidResult = adapter.ToLuid(out var luid);
         if (luidResult != WinIpError.Success) return luidResult;
@@ -292,8 +323,7 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
         // IP削除用のROW構造体設定
         PInvoke.InitializeUnicastIpAddressEntry(out var addrRow);
         addrRow.InterfaceLuid = luid;
-        addrRow.OnLinkPrefixLength = (byte)prefix;
-        addrRow.SetAddress(addr);
+        addrRow.SetAddress(netAddr);
 
         // IP削除
         var apiResult = PInvoke.DeleteUnicastIpAddressEntry(addrRow);
@@ -471,6 +501,18 @@ public class WinIpAddrOperator(WinIpAddrOperatorOptions? options = null)
 /// <summary>IPアドレスAPI関連拡張メソッド</summary>
 file static class IPAddressExtensions
 {
+    /// <summary>MIB_UNICASTIPADDRESS_ROW にIPアドレスを設定する</summary>
+    /// <param name="self">設定対象の MIB_UNICASTIPADDRESS_ROW</param>
+    /// <param name="address">追加するIPアドレス/プレフィックス</param>
+    public static void SetAddress(this ref MIB_UNICASTIPADDRESS_ROW self, IPNetAddress address)
+    {
+        // アドレス設定
+        self.SetAddress(address.IP);
+
+        // プレフィクス設定
+        self.OnLinkPrefixLength = address.Prefix;
+    }
+
     /// <summary>MIB_UNICASTIPADDRESS_ROW にIPアドレスを設定する</summary>
     /// <param name="self">設定対象の MIB_UNICASTIPADDRESS_ROW</param>
     /// <param name="addr">設定するIPアドレス</param>
