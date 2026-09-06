@@ -7,7 +7,8 @@
 
 このライブラリは、一時的なIPアドレスの操作を行う Windows API の単純なラッパーです。  
 追加するIPアドレスは、再起動やネットワークインタフェースのリセットによって破棄される一時的なものです。  
-テストなどで一時的にIPアドレスが必要な場合向けになります。  
+これは、インタフェースのDHCPアドレスと共存することもできます。  
+テストなどで一時的にIPアドレスが必要な場合に向けになります。  
 
 詳しくは [CreateUnicastIpAddressEntry](https://learn.microsoft.com/windows/win32/api/netioapi/nf-netioapi-createunicastipaddressentry) を参照してください。  
 

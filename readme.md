@@ -7,6 +7,7 @@
 
 This library is a simple wrapper around the Windows API for manipulating temporary IP addresses.  
 The IP addresses you add are temporary and will be discarded when the system is rebooted or when the network interface is reset.  
+This can also coexist with the interface’s DHCP-assigned address.  
 It is intended for scenarios where a temporary IP address is needed, such as testing.
 
 For more details, see [CreateUnicastIpAddressEntry](https://learn.microsoft.com/windows/win32/api/netioapi/nf-netioapi-createunicastipaddressentry).
