@@ -2,7 +2,7 @@
 #:property TargetFramework=net10.0-windows7.0
 #:project ../src/NebriaChip.Ip.Win.csproj
 #:package ConsoleAppFramework@5.7.13
-#:package Lestaly@0.143.0
+#:package Lestaly.General@0.147.0
 using System.Net;
 using ConsoleAppFramework;
 using Lestaly;
